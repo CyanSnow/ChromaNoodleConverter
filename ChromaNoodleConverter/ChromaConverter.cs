@@ -1,5 +1,4 @@
 ﻿using SimpleJson;
-using System;
 
 namespace ChromaNoodleConverter
 {
@@ -7,7 +6,7 @@ namespace ChromaNoodleConverter
     {
         private static int rgbOffset = 2000000000;
         private JSONNode map;
-        private double[][] currentColor = new double[][] { new double[3] { -1, -1, -1 }, new double[3] { -1, -1, -1 }, new double[3] { -1, -1, -1 }, new double[3] { -1, -1, -1 }, new double[3] { -1, -1, -1 } };
+        private JSONNode[] currentColor = new JSONNode[5] { null, null, null, null, null };
 
         public ChromaConverter(JSONNode inputMap)
         {
@@ -21,15 +20,15 @@ namespace ChromaNoodleConverter
             {
                 if (mapEvent["_value"] >= rgbOffset)
                 {
-                    currentColor[mapEvent["_type"]] = getRGBColor(mapEvent);
+                    currentColor[mapEvent["_type"]] = getRGBColor(mapEvent["_value"]);
                 }
                 else if (mapEvent["_type"] <= 4 && mapEvent["_value"] > 0)
                 {
-                    JSONNode tempObject = new JSONObject();
-                    if (currentColor[mapEvent["_type"]][0] != -1)
+                    if (currentColor[mapEvent["_type"]] != null)
                     {
-                        tempObject.Add("_color", JSONNode.Parse("[" + currentColor[mapEvent["_type"]][0] + "," + currentColor[mapEvent["_type"]][1] + "," + currentColor[mapEvent["_type"]][2] + "]"));
-                        mapEvent.Add("_customData", tempObject);
+                        JSONObject temp = new JSONObject();
+                        temp["_color"] = currentColor[mapEvent["_type"]];
+                        mapEvent["_customData"] = temp;
                     }
                     newEventArray.Add(mapEvent);
                 }
@@ -42,16 +41,12 @@ namespace ChromaNoodleConverter
             return map;
         }
 
-        private double[] getRGBColor(JSONObject mapEvent)
+        private JSONNode getRGBColor(int value)
         {
-            double decColor = mapEvent["_value"].AsDouble - rgbOffset,
-                r = Math.Floor(decColor / (256 * 256)) / 255,
-                g = (Math.Floor(decColor / 256) % 256) / 255,
-                b = (decColor % 256) / 255;
+            int decColor = value - rgbOffset;
+            Color color = new Color((double)((decColor >> 16) & 0x0ff) / 255, (double)((decColor >> 8) & 0x0ff) / 255, (double)((decColor) & 0x0ff) / 255);
 
-            double[] color = new double[3] { r, g, b };
-
-            return color;
+            return color.ToJSONNode();
         }
     }
 }
