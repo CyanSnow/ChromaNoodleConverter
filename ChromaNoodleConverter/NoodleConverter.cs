@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ChromaNoodleConverter
+﻿namespace ChromaNoodleConverter
 {
-    class NoodleConverter
+    internal class NoodleConverter
     {
         //todo
     }

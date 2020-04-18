@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace ChromaNoodleConverter
 {
-    class JSONParser
+    internal class JSONParser
     {
         private int convertedCount = 0;
+
         public JSONParser(String[] inputData)
         {
             foreach (String path in inputData)
@@ -62,17 +62,17 @@ namespace ChromaNoodleConverter
                     if (suggestionsArray.Exists(x => x.Equals("Chroma")) || requirementsArray.Exists(x => x.Equals("Chroma")))
                     {
                         newMap = new ChromaConverter(newMap).start();
+                        convertedCount++;
                     }
 
                     if (suggestionsArray.Exists(x => x.Equals("Noodle Extensions")) || requirementsArray.Exists(x => x.Equals("Noodle Extensions")))
                     {
                         //newMap = new NoodleConverter(newMap).start();
                     }
-                    if (newMap != originalMap)
+                    if (convertedCount > 0)
                     {
                         //todo - copy everything to a new folder instead of appending _new
                         File.WriteAllText(filePath.Replace("\"", "").Replace(".dat", "") + "_new.dat", newMap.ToString());
-                        convertedCount++;
                     }
                 }
             }
@@ -87,8 +87,5 @@ namespace ChromaNoodleConverter
             }
             return l;
         }
-
-
-
     }
 }
