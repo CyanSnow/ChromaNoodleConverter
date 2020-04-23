@@ -61,13 +61,14 @@ namespace ChromaNoodleConverter
                     JSONNode newMap = originalMap;
                     if (suggestionsArray.Exists(x => x.Equals("Chroma")) || requirementsArray.Exists(x => x.Equals("Chroma")))
                     {
-                        newMap = new ChromaConverter(newMap).start();
-                        convertedCount++;
+                        //newMap = new ChromaConverter(newMap).start();
+                        //convertedCount++;
                     }
 
                     if (suggestionsArray.Exists(x => x.Equals("Noodle Extensions")) || requirementsArray.Exists(x => x.Equals("Noodle Extensions")))
                     {
-                        //newMap = new NoodleConverter(newMap).start();
+                        newMap = new NoodleConverter(newMap).start();
+                        convertedCount++;
                     }
                     if (convertedCount > 0)
                     {

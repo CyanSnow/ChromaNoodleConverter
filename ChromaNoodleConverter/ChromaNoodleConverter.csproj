@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<TargetFramework>net48</TargetFramework>
     <StartupObject>ChromaNoodleConverter.Program</StartupObject>
     <NoWin32Manifest>true</NoWin32Manifest>
     <ApplicationIcon>ramen_sUh_icon.ico</ApplicationIcon>
