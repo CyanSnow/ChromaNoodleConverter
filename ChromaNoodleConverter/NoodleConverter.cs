@@ -20,6 +20,13 @@ namespace ChromaNoodleConverter
                 newNoteArray.Add(makeNENote(mapNote));
             }
             map["_notes"] = newNoteArray;
+
+            JSONNode newWallArray = new JSONArray();
+            foreach (JSONObject mapWall in map["_obstacles"])
+            {
+                newWallArray.Add(makeNEWall(mapWall));
+            }
+            map["_obstacles"] = newWallArray;
             return map;
         }
 
@@ -35,7 +42,8 @@ namespace ChromaNoodleConverter
             JSONArray _pos = new JSONArray();
             if (note["_lineIndex"] >= 1000 || note["_lineIndex"] <= -1000)
             {
-                _pos[0] = (note["_lineIndex"] - (note["_lineIndex"] >= 1000 ? 1000 : -1000)) / 1000 - 2;
+                //fuck man idk just fucking casting everything b/c everything hates me
+                _pos[0] = (double)(((double)note["_lineIndex"] - (double)((double)note["_lineIndex"] >= 1000 ? 1000 : -1000)) / 1000 - 2);
             }
             else
             {
@@ -44,21 +52,20 @@ namespace ChromaNoodleConverter
 
             if (note["_lineLayer"] >= 1000 || note["_lineLayer"] <= -1000)
             {
-                _pos[1] = (note["_lineLayer"] - (note["_lineLayer"] >= 1000 ? 1000 : -1000)) / 1000;
+                _pos[1] = (double)(((double)note["_lineLayer"] - (double)((double)note["_lineLayer"] >= 1000 ? 1000 : -1000)) / 1000 + 0.4);
             }
             else
             {
-                _pos[1] = note["_lineLayer"];
+                _pos[1] = note["_lineLayer"] + 0.4;
             }
 
-            if (_pos[0] >= 6 || _pos[0] <= -6 || _pos[1] >= 4 || _pos[1] <= -2)
+            if (note["_type"] != 3 && (_pos[0] == null || _pos[0] >= 6 || _pos[0] <= -6 || _pos[1] == null || _pos[1] >= 4 || _pos[1] <= -2))
             {
                 Console.WriteLine("Possiable impossible hit detected at: " + note["_time"]);
             }
             return _pos;
         }
 
-        //_cutDirection
         private double? findNENoteDir(JSONNode note)
         {
             if (note["_cutDirection"] >= 1000)
@@ -102,10 +109,51 @@ namespace ChromaNoodleConverter
             return null;
         }
 
-        //private JSONNode makeNEWall(JSONNode wall)
-        //{
-        //    //{ "_time":51.5,"_lineIndex":0,"_type":0,"_duration":0.75,"_width":0,"_customData":{ "_position":[14,-0.25],"_scale":[0.1,0.2],"_localRotation":[0,0,0],"_rotation":341,"_color":[1,0,0,1]}},
-        //    return
-        //}
+        private JSONNode makeNEWall(JSONNode wall)
+        {
+            double NE_positionX = findStartRow(wall["_lineIndex"]);
+            double NE_positionY = findStartHeight(wall["_type"]);
+
+            double NE_scaleX = findWidth(wall["_width"]);
+            double NE_scaleY = findHeight(wall["_type"]);
+
+            return new Wall(wall, NE_positionX, NE_positionY, NE_scaleX, NE_scaleY).ToJSONNode();
+        }
+
+
+        private double findHeight(double wallType)
+        {
+            double wallHeight = wallType;
+            wallHeight /= 1000;
+            wallHeight /= 1000;
+            wallHeight = (wallHeight / (1.0 / 3.0));
+            wallHeight = (wallHeight * (4.0 / 3.0));
+            return wallHeight;
+        }
+        private double findStartHeight(double wallType)
+        {
+            double wallStartHeight = wallType % 1000;
+            wallStartHeight /= 250;
+            wallStartHeight = wallStartHeight * (4.0 / 3.0);
+            return wallStartHeight;
+        }
+        private double findStartRow(double wallLineIndex)
+        {
+            double wallStartRow = (wallLineIndex - 1000) / 1000;
+            if (wallLineIndex >= 1000)
+            {
+                return wallStartRow - 2;
+            }
+            else
+            {
+                return wallStartRow;
+            }
+        }
+        private double findWidth(double wallWidth)
+        {
+            return (wallWidth - 1000) / 1000;
+        }
+
+
     }
 }

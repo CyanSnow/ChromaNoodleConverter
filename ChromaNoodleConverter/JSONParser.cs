@@ -7,7 +7,8 @@ namespace ChromaNoodleConverter
 {
     internal class JSONParser
     {
-        private int convertedCount = 0;
+        private int chromaConvertedCount = 0;
+        private int NEConvertedCount = 0;
 
         public JSONParser(String[] inputData)
         {
@@ -22,8 +23,11 @@ namespace ChromaNoodleConverter
                     Console.WriteLine("Invalid directory");
                 }
             }
-            if (convertedCount > 0)
-                Console.WriteLine("Converted " + convertedCount + " maps");
+            if (chromaConvertedCount > 0)
+                Console.WriteLine("Converted " + chromaConvertedCount + " Chroma maps");
+            if (NEConvertedCount > 0)
+                Console.WriteLine("Converted " + NEConvertedCount + " Noodle Extensions maps");
+
             else
                 Console.WriteLine("No maps were converted\n" +
                     "Please add \"Chroma\" or \"Noodle Extensions\" to the difficulties you want converted in the info.dat\n" +
@@ -59,22 +63,28 @@ namespace ChromaNoodleConverter
                     }
                     JSONNode originalMap = JSON.Parse(File.ReadAllText(filePath));
                     JSONNode newMap = originalMap;
+
+                    //newMap = new NoteSorter(newMap).start();
+
                     if (suggestionsArray.Exists(x => x.Equals("Chroma")) || requirementsArray.Exists(x => x.Equals("Chroma")))
                     {
-                        //newMap = new ChromaConverter(newMap).start();
-                        //convertedCount++;
+                        newMap = new ChromaConverter(newMap).start();
+                        Console.WriteLine(diff["_beatmapFilename"] + "'s lights improved");
+                        chromaConvertedCount++;
                     }
 
                     if (suggestionsArray.Exists(x => x.Equals("Noodle Extensions")) || requirementsArray.Exists(x => x.Equals("Noodle Extensions")))
                     {
                         newMap = new NoodleConverter(newMap).start();
-                        convertedCount++;
+                        Console.WriteLine(diff["_beatmapFilename"] + " has been noodled");
+                        NEConvertedCount++;
                     }
-                    if (convertedCount > 0)
+                    if (NEConvertedCount > 0 || chromaConvertedCount > 0)
                     {
                         //todo - copy everything to a new folder instead of appending _new
                         File.WriteAllText(filePath.Replace("\"", "").Replace(".dat", "") + "_new.dat", newMap.ToString());
                     }
+                    Console.WriteLine();
                 }
             }
         }

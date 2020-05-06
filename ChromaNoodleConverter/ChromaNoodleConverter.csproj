@@ -6,6 +6,9 @@
     <StartupObject>ChromaNoodleConverter.Program</StartupObject>
     <NoWin32Manifest>true</NoWin32Manifest>
     <ApplicationIcon>ramen_sUh_icon.ico</ApplicationIcon>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>k.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

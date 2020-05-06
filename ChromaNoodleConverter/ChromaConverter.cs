@@ -1,4 +1,5 @@
 ﻿using SimpleJson;
+using System;
 
 namespace ChromaNoodleConverter
 {
@@ -18,7 +19,9 @@ namespace ChromaNoodleConverter
             JSONNode newEventArray = new JSONArray();
             foreach (JSONObject mapEvent in map["_events"])
             {
-                if (mapEvent["_value"] >= rgbOffset)
+                if (mapEvent["_type"] == 5 || mapEvent["_type"] == 6 || mapEvent["_type"] == 7 || mapEvent["_type"] == 10 || mapEvent["_type"] == 11) { continue; }
+
+                if (mapEvent["_type"] <= 4 && mapEvent["_value"] >= rgbOffset)
                 {
                     currentColor[mapEvent["_type"]] = getRGBColor(mapEvent["_value"]);
                 }
@@ -26,7 +29,11 @@ namespace ChromaNoodleConverter
                 {
                     if (currentColor[mapEvent["_type"]] != null)
                     {
-                        JSONObject temp = new JSONObject();
+                        JSONNode temp = new JSONObject();
+
+                        if (mapEvent["_customData"] != null)
+                            temp = mapEvent["_customData"];
+
                         temp["_color"] = currentColor[mapEvent["_type"]];
                         mapEvent["_customData"] = temp;
                     }
