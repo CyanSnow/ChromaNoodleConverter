@@ -6,7 +6,6 @@ namespace ChromaNoodleConverter
     {
         private double _time;
         private double _lineIndex;
-        private double _lineLayer;
         private double _type;
         private double _width;
         private double _duration;
@@ -20,7 +19,6 @@ namespace ChromaNoodleConverter
         {
             this._time = wall["_time"];
             this._lineIndex = wall["_lineIndex"];
-            this._lineLayer = wall["_lineLayer"];
             this._type = wall["_type"];
             this._width = wall["_width"];
             this._duration = wall["_duration"];
@@ -36,7 +34,6 @@ namespace ChromaNoodleConverter
             JSONObject obj = new JSONObject();
             obj.Add("_time", _time);
             obj.Add("_lineIndex", _lineIndex);
-            obj.Add("_lineLayer", _lineLayer);
             obj.Add("_type", _type);
             obj.Add("_width", _width);
             obj.Add("_duration", _duration);

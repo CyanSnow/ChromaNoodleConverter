@@ -9,6 +9,7 @@
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>k.snk</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
+    <Version>1.1.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
