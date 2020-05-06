@@ -6,7 +6,7 @@
     <StartupObject>ChromaNoodleConverter.Program</StartupObject>
     <NoWin32Manifest>true</NoWin32Manifest>
     <ApplicationIcon>ramen_sUh_icon.ico</ApplicationIcon>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>k.snk</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
   </PropertyGroup>
