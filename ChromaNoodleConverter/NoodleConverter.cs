@@ -43,7 +43,7 @@ namespace ChromaNoodleConverter
             if (note["_lineIndex"] >= 1000 || note["_lineIndex"] <= -1000)
             {
                 //fuck man idk just fucking casting everything b/c everything hates me
-                _pos[0] = (double)(((double)note["_lineIndex"] - (double)((double)note["_lineIndex"] >= 1000 ? 1000 : -1000)) / 1000 - 2);
+                _pos[0] = (double)(((double)note["_lineIndex"] - (double)((double)note["_lineIndex"] >= 1000 ? 1000d : -1000d)) / 1000d - 2d);
             }
             else
             {
@@ -52,11 +52,11 @@ namespace ChromaNoodleConverter
 
             if (note["_lineLayer"] >= 1000 || note["_lineLayer"] <= -1000)
             {
-                _pos[1] = (double)(((double)note["_lineLayer"] - (double)((double)note["_lineLayer"] >= 1000 ? 1000 : -1000)) / 1000 + 0.4);
+                _pos[1] = (double)(((double)note["_lineLayer"] - (double)((double)note["_lineLayer"] >= 1000 ? 1000d : -1000d)) / 1000d);
             }
             else
             {
-                _pos[1] = note["_lineLayer"] + 0.4;
+                _pos[1] = note["_lineLayer"];
             }
 
             if (note["_type"] != 3 && (_pos[0] == null || _pos[0] >= 6 || _pos[0] <= -6 || _pos[1] == null || _pos[1] >= 4 || _pos[1] <= -2))
@@ -70,7 +70,7 @@ namespace ChromaNoodleConverter
         {
             if (note["_cutDirection"] >= 1000)
             {
-                return 1360 - note["_cutDirection"];
+                return 1360d - note["_cutDirection"];
             }
             else
             {
@@ -120,26 +120,34 @@ namespace ChromaNoodleConverter
             return new Wall(wall, NE_positionX, NE_positionY, NE_scaleX, NE_scaleY).ToJSONNode();
         }
 
-
         private double findHeight(double wallType)
         {
             double wallHeight = wallType;
-            wallHeight /= 1000;
-            wallHeight /= 1000;
-            wallHeight = (wallHeight / (1.0 / 3.0));
-            wallHeight = (wallHeight * (4.0 / 3.0));
+            if (wallType < 1000)
+            {
+            }
+            else if (wallType < 4000)
+            {
+                wallHeight = (wallHeight - 1000) / (5.0d / 3.0d);
+            }
+            else
+            {
+                wallHeight -= 4001d;
+                wallHeight /= 1000d;
+                wallHeight = wallHeight / 1000d / (1.0d / 3.0d) * (5.0d / 3.0d);
+            }
             return wallHeight;
         }
         private double findStartHeight(double wallType)
         {
-            double wallStartHeight = wallType % 1000;
-            wallStartHeight /= 250;
-            wallStartHeight = wallStartHeight * (4.0 / 3.0);
+            double wallStartHeight = wallType % 1000d;
+            wallStartHeight /= 250d;
+            wallStartHeight *= (5.0d / 3.0d);
             return wallStartHeight;
         }
         private double findStartRow(double wallLineIndex)
         {
-            double wallStartRow = (wallLineIndex - 1000) / 1000;
+            double wallStartRow = (wallLineIndex - 1000d) / 1000d;
             if (wallLineIndex >= 1000)
             {
                 return wallStartRow - 2;
