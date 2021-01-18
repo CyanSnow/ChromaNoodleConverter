@@ -18,9 +18,8 @@ namespace ChromaNoodleConverter
         {
             JSONNode newEventArray = new JSONArray();
             foreach (JSONObject mapEvent in map["_events"])
-            {
+            { 
                 if (mapEvent["_type"] == 5 || mapEvent["_type"] == 6 || mapEvent["_type"] == 7 || mapEvent["_type"] == 10 || mapEvent["_type"] == 11) { continue; }
-
                 if (mapEvent["_type"] <= 4 && mapEvent["_value"] >= rgbOffset)
                 {
                     currentColor[mapEvent["_type"]] = getRGBColor(mapEvent["_value"]);
@@ -44,6 +43,7 @@ namespace ChromaNoodleConverter
                     newEventArray.Add(mapEvent);
                 }
             }
+            
             map["_events"] = newEventArray;
             return map;
         }

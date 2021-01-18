@@ -23,24 +23,33 @@ namespace ChromaNoodleConverter
                     Console.WriteLine("Invalid directory");
                 }
             }
-            if (chromaConvertedCount > 0)
-                Console.WriteLine("Converted " + chromaConvertedCount + " Chroma maps");
-            if (NEConvertedCount > 0)
-                Console.WriteLine("Converted " + NEConvertedCount + " Noodle Extensions maps");
-
+            if (chromaConvertedCount > 0 || NEConvertedCount > 0)
+            {
+                if (chromaConvertedCount > 0)
+                    Console.WriteLine("Converted " + chromaConvertedCount + " Chroma maps");
+                if (NEConvertedCount > 0)
+                    Console.WriteLine("Converted " + NEConvertedCount + " Noodle Extensions maps");
+            }
             else
+            {
                 Console.WriteLine("No maps were converted\n" +
                     "Please add \"Chroma\" or \"Noodle Extensions\" to the difficulties you want converted in the info.dat\n" +
                     "or these were already converted"
                     );
+            }
         }
 
         public void ProcessDirectory(string targetDirectory)
         {
             string[] fileEntries = Directory.GetFiles(targetDirectory);
             foreach (string fileName in fileEntries)
+            {
+       
                 if (fileName.EndsWith("info.dat"))
                     ProcessFile(fileName, targetDirectory);
+                else if (fileName.EndsWith("Info.dat"))
+                    ProcessFile(fileName, targetDirectory);
+            }
             string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
             foreach (string subdirectory in subdirectoryEntries)
                 ProcessDirectory(subdirectory);
